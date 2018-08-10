@@ -100,9 +100,9 @@ class Jokes extends React.Component {
 
     fetchJokes = async () => {
         const token = localStorage.getItem('token');
-        // if (!token){
-        //     this.props.history.replace('/login');
-        // }
+        if (!token){
+            this.props.history.replace('/login');
+        }
 
         try {
             const response = await axios({
@@ -166,7 +166,8 @@ class Jokes extends React.Component {
 
         return (
             <Content>
-                {this.state.isAuthenticated ? jokesTable : warning}
+                {/* {this.state.isAuthenticated ? jokesTable : warning} */}
+                {jokesTable}
             </Content>
         );
     }
