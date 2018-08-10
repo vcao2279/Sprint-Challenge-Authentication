@@ -29,8 +29,10 @@ const Th = styled.th`
     // border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
-    background: #404F50;
-    color: #F1FAEE;
+    // background: #404F50;
+    color: #404F50;
+    font-size: 18px;
+    font-weight: bold;
     // font-family: 'Roboto', Sans-Serif;
 `
 
@@ -59,7 +61,7 @@ const Warning = styled.p`
 `
 
 const Nav = styled.div`
-    height: 40px;
+    height: 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -67,6 +69,7 @@ const Nav = styled.div`
     text-align: right;
     background: #404F50;
     color:  #F1FAEE;
+    border-radius: 5px;
 `
 const Button = styled.button`
     background: none;
@@ -79,6 +82,7 @@ const Button = styled.button`
     font-weight: bold;
     font-size: 16px;
     font-family: "Comic Sans MS", cursive, sans-serif;
+    paddding: 0;
 `
 class Jokes extends React.Component {
     constructor(props) {
