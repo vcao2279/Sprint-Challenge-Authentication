@@ -48,11 +48,28 @@ async function register(req, res, next) {
   } catch (error) {
     return next(sendError(500, 'Failed to register,', error.message));
   }
-
 }
 
-function login(req, res) {
-  // implement user login
+async function login(req, res, next) {
+  if (!(req.body.username && req.body.password)) {
+    return next(sendError(400, 'Failed to login.', 'Username or password is missing.'));
+  }
+
+  const user=req.body;
+  try {
+    const response = await db('users').select('password').where('username', user.username).first();
+    const match = bcrypt.compareSync(user.password, response.password);
+    if (match) {
+      const token = generateToken(user);
+      res.status(200).send(token);
+    } else {
+      return next(sendError(401, 'Failed to login,', 'Invalid login.'));
+    }
+    
+
+  } catch (error) {
+    return next(sendError(500, 'Failed to login,', error.message));
+  }
 }
 
 function getJokes(req, res) {
