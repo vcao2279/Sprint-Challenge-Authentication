@@ -15,6 +15,10 @@ server.use(cors());
 
 configureRoutes(server);
 
+server.use((error, req, res, next) => {
+  res.status(error.code).json({message: error.message, error: error.error})
+})
+
 module.exports = {
   server,
 };

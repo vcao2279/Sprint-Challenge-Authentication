@@ -1,4 +1,8 @@
 const axios = require('axios');
+const bcrypt = require('bcryptjs');
+const db = require('../database/dbConfig');
+const jwt = require('jsonwebtoken');
+const jwtKey = require('../_secrets/keys').jwtKey;
 
 const { authenticate } = require('./middlewares');
 
@@ -8,8 +12,43 @@ module.exports = server => {
   server.get('/api/jokes', authenticate, getJokes);
 };
 
-function register(req, res) {
+function sendError(code, message, error) {
+  return {
+    code,
+    message,
+    error
+  }
+}
+
+function generateToken(user) {
+  const payload = {
+    username: user.username
+  }
+
+  const options = {
+    expiresIn: '1h'
+  }
+
+  return jwt.sign(payload, jwtKey, options);
+}
+
+async function register(req, res, next) {
   // implement user registration
+  if (!(req.body.username && req.body.password)) {
+    return next(sendError(400, 'Failed to register.', 'Username or password is missing.'));
+  }
+
+  const user=req.body;
+  const hash = bcrypt.hashSync(user.password, 12);
+  user.password = hash;
+  try {
+    const response = await db('users').insert(user);
+    const token = generateToken(user);
+    res.status(200).send(token);
+  } catch (error) {
+    return next(sendError(500, 'Failed to register,', error.message));
+  }
+
 }
 
 function login(req, res) {
